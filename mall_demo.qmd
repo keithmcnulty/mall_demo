@@ -1,0 +1,164 @@
+---
+title: "Mall package demo"
+format: html
+---
+
+This is a short demo of the package R version of the `mall` package (a Python version also exists).  `mall` is designed to give data scientists an easy workflow to perform classic NLP inference using both local and remote vendor LLMs.
+
+For local LLMs to work, `ollama` must be installed locally or on the same server and the `ollamar` package must be used to interact with `ollama`.  For remote LLMs, the `ellmer` package is used.  Note that the current CRAN version of `mall` only supports local LLM use, but the dev version supports both.  To install the dev version use `pak::pak("mlverse/mall/r")`. 
+
+
+```{r}
+library(mall)
+library(dplyr)
+library(ellmer)
+library(ollamar)
+
+# use 5 new york times comments from a dataset from Kaggle
+nyt_comments <- read.csv("CommentsApril2017.csv") |> 
+  dplyr::select(commentID, commentBody) |> 
+  dplyr::sample_n(5)
+
+head(nyt_comments)
+```
+
+# Start with local models using `ollamar`
+
+```{r}
+# check models
+ollamar::list_models()
+```
+
+# Use locally installed Gemma model
+```{r}
+# use gemma
+mall::llm_use(backend = "ollama", model = "gemma")
+```
+
+
+## Comment sentiment
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_sentiment(commentBody)
+```
+
+## Comment summary
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_summarize(commentBody, max_words = 5)
+```
+
+## Comment classification
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_classify(commentBody, labels = c("US related", "Non-US related"))
+```
+
+## Extract entities
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_extract(commentBody, labels = "person")
+```
+
+## Verify
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_verify(commentBody, what = "Is this a statement about art?")
+```
+
+## Translate
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_translate(commentBody, language = "Japanese")
+```
+
+## Custom prompt
+
+```{r}
+my_prompt <- paste(
+  "Answer a question.",
+  "Return only the answer, no explanation",
+  "Acceptable answers are 'yes', 'no'",
+  "Answer this about the following text, does the text contain HTML code?:"
+)
+
+nyt_comments <- nyt_comments |> 
+  mall::llm_custom(commentBody, my_prompt)
+```
+
+# Move to remote models using `ellmer`
+
+```{r}
+# this only currently works with the DEV version of mall
+# pak::pak("mlverse/mall/r")
+
+# set chat session with Claude
+chat <- ellmer::chat_claude(
+  base_url = Sys.getenv("ANTHROPIC_BASE_URL")
+)
+
+# tell mall to use this chat session as its backend
+mall::llm_use(backend = chat)
+```
+
+## Comment sentiment
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_sentiment(commentBody)
+```
+
+## Comment summary
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_summarize(commentBody, max_words = 5)
+```
+
+## Comment classification
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_classify(commentBody, labels = c("US related", "Non-US related"))
+```
+
+## Extract entities
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_extract(commentBody, labels = "person")
+```
+
+## Verify
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_verify(commentBody, what = "Is this a statement about art?")
+```
+
+## Translate
+
+```{r}
+nyt_comments <- nyt_comments |> 
+  mall::llm_translate(commentBody, language = "Japanese")
+```
+
+## Custom prompt
+
+```{r}
+my_prompt <- paste(
+  "Answer a question.",
+  "Return only the answer, no explanation",
+  "Acceptable answers are 'yes', 'no'",
+  "Answer this about the following text, does the text contain HTML code?:"
+)
+
+nyt_comments <- nyt_comments |> 
+  mall::llm_custom(commentBody, my_prompt)
+```
