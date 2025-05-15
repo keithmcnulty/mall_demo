@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Mall package demo</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="mall_demo_files/libs/clipboard/clipboard.min.js"></script>
+<script src="mall_demo_files/libs/quarto-html/quarto.js"></script>
+<script src="mall_demo_files/libs/quarto-html/popper.min.js"></script>
+<script src="mall_demo_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="mall_demo_files/libs/quarto-html/anchor.min.js"></script>
+<link href="mall_demo_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="mall_demo_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="mall_demo_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="mall_demo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="mall_demo_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mall package demo</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>This is a short demo of the package R version of the <code>mall</code> package (a Python version also exists). <code>mall</code> is designed to give data scientists an easy workflow to perform classic NLP inference using both local and remote vendor LLMs.</p>
+<p>For local LLMs to work, <code>ollama</code> must be installed locally or on the same server and the <code>ollamar</code> package must be used to interact with <code>ollama</code>. For remote LLMs, the <code>ellmer</code> package is used. Note that the current CRAN version of <code>mall</code> only supports local LLM use, but the dev version supports both. To install the dev version use <code>pak::pak("mlverse/mall/r")</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mall)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ellmer)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ollamar)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># use simple reviews dataset</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"reviews"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="start-with-local-models-using-ollamar" class="level2">
+<h2 class="anchored" data-anchor-id="start-with-local-models-using-ollamar">Start with local models using <code>ollamar</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check models</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ollamar<span class="sc">::</span><span class="fu">list_models</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              name   size parameter_size quantization_level            modified
+1     gemma:latest   5 GB             9B               Q4_0 2025-05-12T17:51:29
+2  llama3.2:latest   2 GB           3.2B             Q4_K_M 2025-05-12T20:38:24
+3 tinyllama:latest 638 MB             1B               Q4_0 2025-05-12T14:27:21</code></pre>
+</div>
+</div>
+<section id="use-locally-installed-gemma-model" class="level3">
+<h3 class="anchored" data-anchor-id="use-locally-installed-gemma-model">Use locally installed Gemma model</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use gemma</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>mall<span class="sc">::</span><span class="fu">llm_use</span>(<span class="at">backend =</span> <span class="st">"ollama"</span>, <span class="at">model =</span> <span class="st">"gemma"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code></code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── mall session object </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Backend: ollama
+LLM session: model:gemma
+R session: cache_folder:/tmp/RtmpwCYRV0/_mall_cache4e8243a77ca5</code></pre>
+</div>
+</div>
+</section>
+<section id="comment-sentiment" class="level3">
+<h3 class="anchored" data-anchor-id="comment-sentiment">Comment sentiment</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_sentiment</span>(review))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment
+1   positive
+2   negative
+3    neutral</code></pre>
+</div>
+</div>
+</section>
+<section id="comment-summary" class="level3">
+<h3 class="anchored" data-anchor-id="comment-summary">Comment summary</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_summarize</span>(review, <span class="at">max_words =</span> <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary
+1   positive              tv great sound screen best
+2   negative              laptop slow keyboard noise
+3    neutral mixed feelings, color good, hard to use</code></pre>
+</div>
+</div>
+</section>
+<section id="comment-classification" class="level3">
+<h3 class="anchored" data-anchor-id="comment-classification">Comment classification</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_classify</span>(review, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"TV related"</span>, <span class="st">"Non-TV related"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related</code></pre>
+</div>
+</div>
+</section>
+<section id="extract-entities" class="level3">
+<h3 class="anchored" data-anchor-id="extract-entities">Extract entities</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_extract</span>(review, <span class="at">labels =</span> <span class="st">"product"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related
+         .extract
+1              tv
+2          laptop
+3 washing machine</code></pre>
+</div>
+</div>
+</section>
+<section id="verify" class="level3">
+<h3 class="anchored" data-anchor-id="verify">Verify</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_verify</span>(review, <span class="at">what =</span> <span class="st">"Is this a statement about a TV?"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! There were 3 predictions with invalid output, they were coerced to NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related
+         .extract .verify
+1              tv    &lt;NA&gt;
+2          laptop    &lt;NA&gt;
+3 washing machine    &lt;NA&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="translate" class="level3">
+<h3 class="anchored" data-anchor-id="translate">Translate</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_translate</span>(review, <span class="at">language =</span> <span class="st">"Japanese"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related
+         .extract .verify
+1              tv    &lt;NA&gt;
+2          laptop    &lt;NA&gt;
+3 washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。</code></pre>
+</div>
+</div>
+</section>
+<section id="custom-prompt" class="level3">
+<h3 class="anchored" data-anchor-id="custom-prompt">Custom prompt</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>my_prompt <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Answer a question."</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Return only the answer, no explanation"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Acceptable answers are 'yes', 'no'"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Answer this about the following text, is it about a computer?:"</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_custom</span>(review, my_prompt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related
+         .extract .verify
+1              tv    &lt;NA&gt;
+2          laptop    &lt;NA&gt;
+3 washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="move-to-remote-models-using-ellmer" class="level2">
+<h2 class="anchored" data-anchor-id="move-to-remote-models-using-ellmer">Move to remote models using <code>ellmer</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># this only currently works with the DEV version of mall</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># pak::pak("mlverse/mall/r")</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co"># set chat session with Claude</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>chat <span class="ot">&lt;-</span> ellmer<span class="sc">::</span><span class="fu">chat_claude</span>(</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">base_url =</span> <span class="fu">Sys.getenv</span>(<span class="st">"ANTHROPIC_BASE_URL"</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># tell mall to use this chat session as its backend</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>mall<span class="sc">::</span><span class="fu">llm_use</span>(<span class="at">backend =</span> chat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code></code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── mall session object </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Backend: ellmer
+LLM session: model:claude-3-5-sonnet-latest
+R session: cache_folder:/tmp/RtmpwCYRV0/_mall_cache4e8243a77ca5</code></pre>
+</div>
+</div>
+<section id="comment-sentiment-1" class="level3">
+<h3 class="anchored" data-anchor-id="comment-sentiment-1">Comment sentiment</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_sentiment</span>(review))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                                .summary      .classify
+1   positive              tv great sound screen best     TV related
+2   negative              laptop slow keyboard noise Non-TV related
+3    neutral mixed feelings, color good, hard to use Non-TV related
+         .extract .verify
+1              tv    &lt;NA&gt;
+2          laptop    &lt;NA&gt;
+3 washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="comment-summary-1" class="level3">
+<h3 class="anchored" data-anchor-id="comment-summary-1">Comment summary</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_summarize</span>(review, <span class="at">max_words =</span> <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary      .classify        .extract
+1   positive   amazing tv with great quality     TV related              tv
+2   negative slow laptop with noisy keyboard Non-TV related          laptop
+3    neutral    new washer has mixed results Non-TV related washing machine
+  .verify
+1    &lt;NA&gt;
+2    &lt;NA&gt;
+3    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="comment-classification-1" class="level3">
+<h3 class="anchored" data-anchor-id="comment-classification-1">Comment classification</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_classify</span>(review, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"TV related"</span>, <span class="st">"Non-TV related"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! There were 3 predictions with invalid output, they were coerced to NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary .classify        .extract .verify
+1   positive   amazing tv with great quality      &lt;NA&gt;              tv    &lt;NA&gt;
+2   negative slow laptop with noisy keyboard      &lt;NA&gt;          laptop    &lt;NA&gt;
+3    neutral    new washer has mixed results      &lt;NA&gt; washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="extract-entities-1" class="level3">
+<h3 class="anchored" data-anchor-id="extract-entities-1">Extract entities</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_extract</span>(review, <span class="at">labels =</span> <span class="st">"product"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary .classify        .extract .verify
+1   positive   amazing tv with great quality      &lt;NA&gt;              tv    &lt;NA&gt;
+2   negative slow laptop with noisy keyboard      &lt;NA&gt;          laptop    &lt;NA&gt;
+3    neutral    new washer has mixed results      &lt;NA&gt; washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="verify-1" class="level3">
+<h3 class="anchored" data-anchor-id="verify-1">Verify</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_verify</span>(review, <span class="at">what =</span> <span class="st">"Is this a statement about a TV?"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>! There were 3 predictions with invalid output, they were coerced to NA</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary .classify        .extract .verify
+1   positive   amazing tv with great quality      &lt;NA&gt;              tv    &lt;NA&gt;
+2   negative slow laptop with noisy keyboard      &lt;NA&gt;          laptop    &lt;NA&gt;
+3    neutral    new washer has mixed results      &lt;NA&gt; washing machine    &lt;NA&gt;
+                                                                        .translation
+1     これは、今まで使ったテレビの中で最高です。素晴らしいスクリーンとサウンドです。
+2 申し訳ない、このノートパソコンを買いました。とても遅く、キーボードもうるさいです。
+3 新しい洗濯機についてよくわからない。色は良いが、どのように使うかはまだわからない。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="translate-1" class="level3">
+<h3 class="anchored" data-anchor-id="translate-1">Translate</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_translate</span>(review, <span class="at">language =</span> <span class="st">"Japanese"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary .classify        .extract .verify
+1   positive   amazing tv with great quality      &lt;NA&gt;              tv    &lt;NA&gt;
+2   negative slow laptop with noisy keyboard      &lt;NA&gt;          laptop    &lt;NA&gt;
+3    neutral    new washer has mixed results      &lt;NA&gt; washing machine    &lt;NA&gt;
+                                                                                  .translation
+1                               今まで使った中で最高のテレビでした。画面も音も素晴らしいです。
+2 このノートパソコンを買ったことを後悔しています。動作が遅すぎて、キーボードがうるさすぎます。
+3 新しい洗濯機についてどう感じていいかわかりません。色は素晴らしいですが、使い方が難しいです。
+                                                   .pred
+1 No.\n\nThe text is about a television, not a computer.
+2                                                    Yes
+3                                                     No</code></pre>
+</div>
+</div>
+</section>
+<section id="custom-prompt-1" class="level3">
+<h3 class="anchored" data-anchor-id="custom-prompt-1">Custom prompt</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>my_prompt <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Answer a question."</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Return only the answer, no explanation"</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Acceptable answers are 'yes', 'no'"</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Answer this about the following text, is it about a computer?:"</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>(reviews <span class="ot">&lt;-</span> reviews <span class="sc">|&gt;</span> </span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  mall<span class="sc">::</span><span class="fu">llm_custom</span>(review, my_prompt))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                                              review
+1                 This has been the best TV I've ever used. Great screen, and sound.
+2          I regret buying this laptop. It is too slow and the keyboard is too noisy
+3 Not sure how to feel about my new washing machine. Great color, but hard to figure
+  .sentiment                        .summary .classify        .extract .verify
+1   positive   amazing tv with great quality      &lt;NA&gt;              tv    &lt;NA&gt;
+2   negative slow laptop with noisy keyboard      &lt;NA&gt;          laptop    &lt;NA&gt;
+3    neutral    new washer has mixed results      &lt;NA&gt; washing machine    &lt;NA&gt;
+                                                                                  .translation
+1                               今まで使った中で最高のテレビでした。画面も音も素晴らしいです。
+2 このノートパソコンを買ったことを後悔しています。動作が遅すぎて、キーボードがうるさすぎます。
+3 新しい洗濯機についてどう感じていいかわかりません。色は素晴らしいですが、使い方が難しいです。
+  .pred
+1    no
+2   yes
+3    no</code></pre>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

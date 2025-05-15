@@ -8,91 +8,88 @@ This is a short demo of the package R version of the `mall` package (a Python ve
 For local LLMs to work, `ollama` must be installed locally or on the same server and the `ollamar` package must be used to interact with `ollama`.  For remote LLMs, the `ellmer` package is used.  Note that the current CRAN version of `mall` only supports local LLM use, but the dev version supports both.  To install the dev version use `pak::pak("mlverse/mall/r")`. 
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(mall)
 library(dplyr)
 library(ellmer)
 library(ollamar)
 
-# use 5 new york times comments from a dataset from Kaggle
-nyt_comments <- read.csv("CommentsApril2017.csv") |> 
-  dplyr::select(commentID, commentBody) |> 
-  dplyr::sample_n(5)
-
-head(nyt_comments)
+# use simple reviews dataset
+data("reviews")
 ```
 
-# Start with local models using `ollamar`
+## Start with local models using `ollamar`
 
 ```{r}
 # check models
 ollamar::list_models()
 ```
 
-# Use locally installed Gemma model
+### Use locally installed Gemma model
+
 ```{r}
 # use gemma
 mall::llm_use(backend = "ollama", model = "gemma")
 ```
 
 
-## Comment sentiment
+### Comment sentiment
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_sentiment(commentBody)
+(reviews <- reviews |> 
+  mall::llm_sentiment(review))
 ```
 
-## Comment summary
+### Comment summary
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_summarize(commentBody, max_words = 5)
+(reviews <- reviews |> 
+  mall::llm_summarize(review, max_words = 5))
 ```
 
-## Comment classification
+### Comment classification
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_classify(commentBody, labels = c("US related", "Non-US related"))
+(reviews <- reviews |> 
+  mall::llm_classify(review, labels = c("TV related", "Non-TV related")))
 ```
 
-## Extract entities
+### Extract entities
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_extract(commentBody, labels = "person")
+(reviews <- reviews |> 
+  mall::llm_extract(review, labels = "product"))
 ```
 
-## Verify
+### Verify
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_verify(commentBody, what = "Is this a statement about art?")
+(reviews <- reviews |> 
+  mall::llm_verify(review, what = "Is this a statement about a TV?"))
 ```
 
-## Translate
+### Translate
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_translate(commentBody, language = "Japanese")
+(reviews <- reviews |> 
+  mall::llm_translate(review, language = "Japanese"))
 ```
 
-## Custom prompt
+### Custom prompt
 
 ```{r}
 my_prompt <- paste(
   "Answer a question.",
   "Return only the answer, no explanation",
   "Acceptable answers are 'yes', 'no'",
-  "Answer this about the following text, does the text contain HTML code?:"
+  "Answer this about the following text, is it about a computer?:"
 )
 
-nyt_comments <- nyt_comments |> 
-  mall::llm_custom(commentBody, my_prompt)
+(reviews <- reviews |> 
+  mall::llm_custom(review, my_prompt))
 ```
 
-# Move to remote models using `ellmer`
+## Move to remote models using `ellmer`
 
 ```{r}
 # this only currently works with the DEV version of mall
@@ -107,58 +104,58 @@ chat <- ellmer::chat_claude(
 mall::llm_use(backend = chat)
 ```
 
-## Comment sentiment
+### Comment sentiment
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_sentiment(commentBody)
+(reviews <- reviews |> 
+  mall::llm_sentiment(review))
 ```
 
-## Comment summary
+### Comment summary
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_summarize(commentBody, max_words = 5)
+(reviews <- reviews |> 
+  mall::llm_summarize(review, max_words = 5))
 ```
 
-## Comment classification
+### Comment classification
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_classify(commentBody, labels = c("US related", "Non-US related"))
+(reviews <- reviews |> 
+  mall::llm_classify(review, labels = c("TV related", "Non-TV related")))
 ```
 
-## Extract entities
+### Extract entities
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_extract(commentBody, labels = "person")
+(reviews <- reviews |> 
+  mall::llm_extract(review, labels = "product"))
 ```
 
-## Verify
+### Verify
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_verify(commentBody, what = "Is this a statement about art?")
+(reviews <- reviews |> 
+  mall::llm_verify(review, what = "Is this a statement about a TV?"))
 ```
 
-## Translate
+### Translate
 
 ```{r}
-nyt_comments <- nyt_comments |> 
-  mall::llm_translate(commentBody, language = "Japanese")
+(reviews <- reviews |> 
+  mall::llm_translate(review, language = "Japanese"))
 ```
 
-## Custom prompt
+### Custom prompt
 
 ```{r}
 my_prompt <- paste(
   "Answer a question.",
   "Return only the answer, no explanation",
   "Acceptable answers are 'yes', 'no'",
-  "Answer this about the following text, does the text contain HTML code?:"
+  "Answer this about the following text, is it about a computer?:"
 )
 
-nyt_comments <- nyt_comments |> 
-  mall::llm_custom(commentBody, my_prompt)
+(reviews <- reviews |> 
+  mall::llm_custom(review, my_prompt))
 ```
